@@ -1,0 +1,41 @@
+#!/bin/sh
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+NC='\033[0m'
+
+commit_file="$1"
+commit_msg_title=$(head -n 1 "$commit_file")
+commit_msg_title_max_size=72
+valid_types="feat fix docs test refactor style chore build ci perf"
+
+# Expresión regular POSIX para Conventional Commits
+convention_pattern="^[a-z]+(\([a-zA-Z0-9_-]+\))?!?:[[:space:]]+.+$"
+
+if echo "$commit_msg_title" | grep -Eq "$convention_pattern"; then
+    # Extraer el tipo (la primera palabra antes del paréntesis o dos puntos)
+    type=$(echo "$commit_msg_title" | grep -Eo '^[a-z]+')
+
+    if ! echo "$valid_types" | grep -w -q "$type"; then
+        printf "${RED}Error: '%s' no es un tipo válido para el mensaje de commit.${NC}\n" "$type"
+        printf "${YELLOW}Tipos permitidos: %s${NC}\n" "$valid_types"
+        exit 1
+    fi
+
+    if [ "${#commit_msg_title}" -gt "$commit_msg_title_max_size" ]; then
+        printf "${RED}Error: El título del commit tiene %d caracteres.${NC}\n" "${#commit_msg_title}"
+        printf "${YELLOW}El límite máximo es de %d caracteres.${NC}\n" "$commit_msg_title_max_size"
+        exit 1
+    fi
+else
+    printf "${RED}Error: Formato de mensaje de commit incorrecto.${NC}\n"
+    printf "${YELLOW}El formato debe seguir Conventional Commits:${NC}\n"
+    printf "${YELLOW}   <tipo>[alcance opcional][! opcional]: <descripción>${NC}\n\n"
+    printf "Ejemplos válidos:\n"
+    printf "  - feat: agregar nueva pantalla de inicio\n"
+    printf "  - fix(ui-login): corregir alineación de botones\n"
+    printf "  - refactor(api)!: cambiar la estructura de la base de datos\n"
+    exit 1 
+fi
+
+printf "${GREEN}Mensaje de commit válido.${NC}\n"
