@@ -1,0 +1,39 @@
+{
+  "name": "inspirateuni-web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/INSPIRATEUNI/inspirateuni-web.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/INSPIRATEUNI/inspirateuni-web/issues"
+  },
+  "homepage": "https://github.com/INSPIRATEUNI/inspirateuni-web#readme",
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^17.6.0",
+    "prettier": "^3.9.9"
+  },
+  "lint-staged": {
+    "frontend/**/*.{js,jsx,ts,tsx}": [
+      "prettier --write",
+      "bash -c 'cd frontend && npx eslint --fix \"$@\"' --",
+      "bash -c 'cd frontend && npx tsc --noEmit'"
+    ],
+    "frontend/**/*.{css,md,json}": [
+      "prettier --write"
+    ]
+  }
+}
