@@ -10,9 +10,9 @@ if [ "$current_branch" = "main" ]; then
     
     cd backend || exit 1
     
-    supabase start
+    npx supabase start
     
-    supabase test db
+    npx supabase test db
     TEST_RESULT=$?
     
     if [ "$TEST_RESULT" -ne 0 ]; then
