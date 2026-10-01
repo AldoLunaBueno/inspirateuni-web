@@ -15,3 +15,6 @@
 *.snm
 *.synctex.gz
 *.toc
+
+# Esto no se sube joven 🐧
+node_modules/

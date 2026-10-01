@@ -1,0 +1,22 @@
+#!/bin/sh
+RED='\033[0;31m'
+YELLOW='\033[0;33m'
+NC='\033[0m'
+
+local_branch="$(git branch --show-current)"
+valid_pattern="^(main|feature/[a-z0-9\-]+|bugfix/[a-z0-9\-]+)$"
+
+if [ -z "$local_branch" ]; then
+    exit 0
+fi
+
+if ! echo "$local_branch" | grep -Eq "$valid_pattern"; then
+    printf "${RED}Error: El nombre de la rama '%s' no es válido.${NC}\n" "$local_branch"
+    printf "${YELLOW}La estrategia de ramificación requiere usar uno de los siguientes formatos:${NC}\n"
+    printf "${YELLOW}  - main${NC}\n"
+    printf "${YELLOW}  - feature/kebab-case (ej. feature/nuevo-login)${NC}\n"
+    printf "${YELLOW}  - bugfix/kebab-case  (ej. bugfix/error-calculo)${NC}\n"
+    exit 1
+fi
+
+npx lint-staged
